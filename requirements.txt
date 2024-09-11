@@ -3,4 +3,3 @@ dm-haiku
 matplotlib
 numpy
 scipy
-typing

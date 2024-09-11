@@ -43,7 +43,7 @@ def _check_in_0_1_range(x, name):
 ###################################
 
 
-class AgentQ:
+class AgentVanillaQ:
   """An agent that runs simple Q-learning for the two-armed bandit tasks.
 
   Attributes:

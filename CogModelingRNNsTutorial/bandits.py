@@ -44,7 +44,7 @@ def _check_in_0_1_range(x, name):
 
 
 class AgentQ:
-  """An agent that runs simple Q-learning for the y-maze tasks.
+  """An agent that runs simple Q-learning for the two-armed bandit tasks.
 
   Attributes:
     alpha: The agent's learning rate

@@ -3,3 +3,6 @@ dm-haiku
 matplotlib
 numpy
 scipy
+absl-py
+chex
+optax

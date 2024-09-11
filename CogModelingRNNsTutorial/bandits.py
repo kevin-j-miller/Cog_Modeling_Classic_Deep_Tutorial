@@ -56,6 +56,75 @@ class AgentQ:
       self,
       alpha: float = 0.2,
       beta: float = 3.,
+      n_actions: int = 2,):
+    """Update the agent after one step of the task.
+
+    Args:
+      alpha: scalar learning rate
+      beta: scalar softmax inverse temperature parameter.
+      n_actions: number of actions (default=2)
+      forgetting_rate: rate at which q values decay toward the initial values (default=0)
+      perseveration_bias: rate at which q values move toward previous action (default=0)
+    """
+    self._alpha = alpha
+    self._beta = beta
+    self._n_actions = n_actions
+    self._q_init = 0.5
+    self.new_sess()
+
+    _check_in_0_1_range(alpha, 'alpha')
+    _check_in_0_1_range(forgetting_rate, 'forgetting_rate')
+
+  def new_sess(self):
+    """Reset the agent for the beginning of a new session."""
+    self._q = self._q_init * np.ones(self._n_actions)
+
+  def get_choice_probs(self) -> np.ndarray:
+    """Compute the choice probabilities as softmax over q."""
+    decision_variable = self._beta * self._q
+    choice_probs = np.exp(decision_variable) / np.sum(np.exp(decision_variable))
+    return choice_probs
+
+  def get_choice(self) -> int:
+    """Sample a choice, given the agent's current internal state."""
+    choice_probs = self.get_choice_probs()
+    choice = np.random.choice(self._n_actions, p=choice_probs)
+    return choice
+
+  def update(self,
+             choice: int,
+             reward: int):
+    """Update the agent after one step of the task.
+
+    Args:
+      choice: The choice made by the agent. 0 or 1
+      reward: The reward received by the agent. 0 or 1
+    """
+    # Update chosen q for chosen action with observed reward.
+    self._q[choice] = (1 - self._alpha) * self._q[choice] + self._alpha * reward
+
+  @property
+  def q(self):
+    # This establishes q as an externally visible attribute of the agent.
+    # For agent = AgentQ(...), you can view the q values with agent.q; however,
+    # you will not be able to modify them directly because you will be viewing
+    # a copy.
+    return self._q.copy()
+
+
+class AgentQ:
+  """An agent that runs simple Q-learning for the two-armed bandit tasks.
+
+  Attributes:
+    alpha: The agent's learning rate
+    beta: The agent's softmax temperature
+    q: The agent's current estimate of the reward probability on each arm
+  """
+
+  def __init__(
+      self,
+      alpha: float = 0.2,
+      beta: float = 3.,
       n_actions: int = 2,
       forgetting_rate: float = 0.,
       perseveration_bias: float = 0.):
@@ -215,14 +284,7 @@ class AgentNetwork:
         self._state = new_state
     except:
       import pdb; pdb.set_trace()
-
-class VanillaAgentQ(AgentQ):
-  """This agent is a wrapper of AgentQ with only alpha and beta parameters."""
-
-  def __init__(self, alpha: float, beta: float, n_actions: int = 2):
-    super(VanillaAgentQ, self).__init__(
-        alpha, beta, n_actions=n_actions, forgetting_rate=0.)
-
+      
 
 class MysteryAgentQ(AgentQ):
   """Don't look at this agent if you want to do the exercises!"""

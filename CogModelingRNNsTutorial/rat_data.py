@@ -1,7 +1,7 @@
 """Functions for loading rat data."""
 import json
 import os
-from typing import List
+from typing import List, NamedTuple
 import urllib.request
 
 import numpy as np

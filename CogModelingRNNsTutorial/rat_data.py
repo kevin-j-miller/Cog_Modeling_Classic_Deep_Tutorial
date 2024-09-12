@@ -183,4 +183,4 @@ def get_rat_bandit_datasets() -> List[rnn_utils.DatasetRNN]:
     dataset_list.append(dataset_rat)
     experiment_list_list.append(experiment_list)
 
-  return dataset_list, experiment_list
+  return dataset_list, experiment_list_list

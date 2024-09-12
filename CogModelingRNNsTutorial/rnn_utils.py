@@ -435,8 +435,9 @@ def step_network(
     return y_hat, new_state
 
   model = hk.transform(step_sub)
-  key = jax.random.PRNGKey(np.random.randint(2**32))
-  y_hat, new_state = model.apply(params, key, np.expand_dims(xs, axis=0))
+  key = jax.random.PRNGKey(0)
+  apply = jax.jit(model.apply)
+  y_hat, new_state = apply(params, key, np.expand_dims(xs, axis=0))
 
   return y_hat, new_state
 

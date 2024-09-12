@@ -276,7 +276,7 @@ class AgentNetwork:
     try:
       self._xs = np.array([[choice, reward]])
       _, new_state = self._model_fun(self._xs, self._state)
-      #self._state = np.array(new_state)
+      self._state = new_state
     except:
       import pdb; pdb.set_trace()
       

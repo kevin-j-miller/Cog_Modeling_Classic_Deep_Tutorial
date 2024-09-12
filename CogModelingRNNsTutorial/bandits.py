@@ -274,7 +274,7 @@ class AgentNetwork:
 
   def update(self, choice: int, reward: int):
     try:
-      self._xs = jnp.array([[choice, reward]])
+      self._xs = np.array([[choice, reward]])
       _, new_state = self._model_fun(self._xs, self._state)
       #self._state = np.array(new_state)
     except:

@@ -140,7 +140,9 @@ def get_rat_bandit_datasets() -> List[rnn_utils.DatasetRNN]:
       instructed_choice_sess = instructed_choice[sess_start:sess_end]
 
       left_probs_sess = left_probs[sess_start:sess_end]
+      left_probs_sess = np.delete(left_probs_sess, viols_sess)
       right_probs_sess = right_probs[sess_start:sess_end]
+      right_probs_sess = np.delete(right_probs_sess, viols_sess)
 
       # Remove violation trials
       rewards_sess = np.delete(rewards_sess, viols_sess)

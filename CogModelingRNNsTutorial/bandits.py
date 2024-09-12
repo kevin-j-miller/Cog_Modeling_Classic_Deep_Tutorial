@@ -73,7 +73,6 @@ class AgentVanillaQ:
     self.new_sess()
 
     _check_in_0_1_range(alpha, 'alpha')
-    _check_in_0_1_range(forgetting_rate, 'forgetting_rate')
 
   def new_sess(self):
     """Reset the agent for the beginning of a new session."""

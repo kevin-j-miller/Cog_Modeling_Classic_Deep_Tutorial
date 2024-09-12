@@ -211,7 +211,7 @@ class AgentNetwork:
                make_network: Callable[[], hk.RNNCore],
                params: hk.Params,
                n_actions: int = 2,
-               state_to_numpy: bool = False):
+               ):
     """Initialize the agent network.
     
     Args: 
@@ -219,7 +219,6 @@ class AgentNetwork:
       params: parameters for the network
       n_actions: number of permitted actions (default = 2)
     """
-    self._state_to_numpy = state_to_numpy
 
     def _step_network(xs: np.ndarray,
                       state: hk.State) -> Tuple[np.ndarray, hk.State]:
@@ -277,10 +276,7 @@ class AgentNetwork:
     try:
       self._xs = np.array([[choice, reward]])
       _, new_state = self._model_fun(self._xs, self._state)
-      if self._state_to_numpy:
-        self._state = np.array(new_state)
-      else:
-        self._state = new_state
+      self._state = np.array(new_state)
     except:
       import pdb; pdb.set_trace()
       

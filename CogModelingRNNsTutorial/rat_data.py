@@ -158,7 +158,7 @@ def get_rat_bandit_datasets() -> List[rnn_utils.DatasetRNN]:
       sessdata = BanditSession(n_trials = np.size(choices_sess),
                                choices = choices_sess,
                                rewards = rewards_sess,
-                               timeseries = np.concatenate([left_probs_sess, right_probs_sess],0)
+                               timeseries = np.concatenate([left_probs_sess, right_probs_sess],1)
                                                            )
       experiment_list.append(sessdata)
 

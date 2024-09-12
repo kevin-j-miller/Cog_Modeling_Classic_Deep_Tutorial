@@ -7,6 +7,8 @@ import urllib.request
 import numpy as np
 import scipy.io
 
+from Cog_Modeling_Classic_Deep_Tutorial.CogModelingRNNsTutorial import rnn_utils
+
 def find(s, ch):
   """Find index of character within string."""
   return [i for i, ltr in enumerate(s) if ltr == ch]

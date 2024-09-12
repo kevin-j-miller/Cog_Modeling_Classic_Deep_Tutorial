@@ -14,6 +14,14 @@ def find(s, ch):
   return [i for i, ltr in enumerate(s) if ltr == ch]
 
 
+class BanditSession(NamedTuple):
+  """Holds data for a single session of a bandit task."""
+  choices: np.ndarray
+  rewards: np.ndarray
+  timeseries: np.ndarray
+  n_trials: int
+
+
 def get_rat_bandit_datasets() -> List[rnn_utils.DatasetRNN]:
   """Downloads and packages rat two-armed bandit datasets.
 

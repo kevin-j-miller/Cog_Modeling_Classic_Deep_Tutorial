@@ -69,6 +69,34 @@ def get_rat_bandit_datasets() -> List[rnn_utils.DatasetRNN]:
     viols[vs] = True
 
     # Free will be 0 and forced will be 1
+    # "trial_types" i  # "dataset" will be a list in which each element is a dict. Each of these
+  # dicts holds data from a single rat.
+
+  # Each iteration of the loop processes data from one rat, converting the dict
+  # into inputs (xs) and targets (ys) for training a neural network, packaging
+  # these into a DatasetRNN object, and appending this to dataset_list
+  n_rats = len(dataset)
+  dataset_list = []
+  experiment_list_list = []
+  for rat_i in range(n_rats):
+    ratdata = dataset[rat_i]
+    # "sides" is a list of characters in which each character specifies the
+    # choice made on a trial. 'r' for right, 'l' for left, 'v' for a violation
+    # Here, we'll code left choices as 0s, right choices as 1s, and will flag
+    # violations for later removal
+    sides = ratdata['sides']
+    n_trials = len(sides)
+    rights = find(sides, 'r')
+    choices = np.zeros(n_trials)
+    choices[rights] = 1
+    vs = find(sides, 'v')
+    viols = np.zeros(n_trials, dtype=bool)
+    viols[vs] = True
+
+    left_probs = np.array(ratdata['left_prob1'])
+    right_probs = np.array(ratdata['right_prob1'])
+
+    # Free will be 0 and forced will be 1
     # "trial_types" is a list of characters, each giving the type of a trial.
     # 'f' for free-choice, 'l' for instructed-left, 'r' for instructed-right
     free = find(ratdata['trial_types'], 'f')
@@ -93,6 +121,7 @@ def get_rat_bandit_datasets() -> List[rnn_utils.DatasetRNN]:
     instructed_by_session = -1 * np.ones((max_session_length, n_sess, 1))
 
     # Each iteration processes one session
+    experiment_list = []
     for sess_i in np.arange(n_sess):
       # Get the choices, rewards, viols, and instructed for just this session
       sess_start = sess_starts[sess_i]
@@ -101,6 +130,9 @@ def get_rat_bandit_datasets() -> List[rnn_utils.DatasetRNN]:
       rewards_sess = rewards[sess_start:sess_end]
       choices_sess = choices[sess_start:sess_end]
       instructed_choice_sess = instructed_choice[sess_start:sess_end]
+
+      left_probs_sess = left_probs[sess_start:sess_end]
+      right_probs_sess = right_probs[sess_start:sess_end]
 
       # Remove violation trials
       rewards_sess = np.delete(rewards_sess, viols_sess)
@@ -114,6 +146,13 @@ def get_rat_bandit_datasets() -> List[rnn_utils.DatasetRNN]:
       instructed_by_session[0:sess_length_noviols, sess_i, 0] = (
           instructed_choice_sess
       )
+
+      sessdata = BanditSession(n_trials = np.size(choices_sess),
+                               choices = choices_sess,
+                               rewards = rewards_sess,
+                               timeseries = np.concatenate([left_probs_sess, right_probs_sess],0)
+                                                           )
+      experiment_list.append(sessdata)
 
     # Define neural network inputs:
     # for each trial the choice and reward from the previous trial.
@@ -134,5 +173,6 @@ def get_rat_bandit_datasets() -> List[rnn_utils.DatasetRNN]:
     # Pack into a DatasetRNN object and append to the list
     dataset_rat = rnn_utils.DatasetRNN(ys=ys, xs=xs)
     dataset_list.append(dataset_rat)
+    experiment_list_list.append(experiment_list)
 
-  return dataset_list
+  return dataset_list, experiment_list

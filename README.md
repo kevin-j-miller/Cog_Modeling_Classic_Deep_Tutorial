@@ -1,5 +1,5 @@
 # Cognitive Models of Behavior: Classical and Deep Learning Approaches
-## By Kevin Miller, Maria Eckstein, and Kim Stachenfeld
+**By Kevin Miller, Maria Eckstein, and Kim Stachenfeld**
 
 This github contains code for a tutorial on fitting computational models to seuqential behavior. 
 Maria, Kevin, and Kim have presented variants of this tutorial at several conferences and summer schools. 

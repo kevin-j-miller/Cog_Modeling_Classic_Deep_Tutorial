@@ -5,7 +5,7 @@ This github contains code for a tutorial on fitting computational models to sequ
 Maria, Kevin, and Kim have presented variants of this tutorial at several conferences and summer schools. 
 It is also designed to allow for a self-guided approach. 
 
-A talk that introduces this tutorial can be viewed at the following link: [Cognitive Models of Behavior Talk](https://www.youtube.com/live/6cxX6M5VFYE?feature=shared&t=2813) (from Computational Cognitive Neuroscience 2023)
+A talk that introduces this tutorial can be viewed at the following link: [Cognitive Models of Behavior Talk](https://www.youtube.com/live/6cxX6M5VFYE?feature=shared&t=2813) 
 
 # Getting started
 1. Open the tutorial notebook, which is found at the following link: [Cognitive Models of Behavior Notebook](https://colab.research.google.com/drive/1bt_ELyVppre7_Sz2jz8fy2UwDlEIm_8d)
